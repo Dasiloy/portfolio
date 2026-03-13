@@ -1,0 +1,1592 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Damilare Oyewole — Software Engineer</title>
+    <link rel="icon" type="image/png" href="public/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="public/favicon.png" />
+    <link rel="apple-touch-icon" href="public/favicon.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --cursor-size: 20px;
+        --cursor-hover-size: 80px;
+        --accent: #ff4d00;
+        --dark: #0a0a0a;
+        --light: #f4f4f0;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background: var(--dark);
+        color: var(--light);
+        overflow-x: hidden;
+        cursor: none;
+      }
+
+      .font-display {
+        font-family: "Syne", sans-serif;
+      }
+
+      /* Custom Cursor */
+      .cursor-dot,
+      .cursor-outline {
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        z-index: 9999;
+        pointer-events: none;
+      }
+
+      .cursor-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--accent);
+        mix-blend-mode: difference;
+      }
+
+      .cursor-outline {
+        width: var(--cursor-size);
+        height: var(--cursor-size);
+        border: 1px solid rgba(255, 77, 0, 0.5);
+        transition:
+          width 0.3s,
+          height 0.3s,
+          background-color 0.3s;
+      }
+
+      .cursor-outline.hover {
+        width: var(--cursor-hover-size);
+        height: var(--cursor-hover-size);
+        background: rgba(255, 77, 0, 0.1);
+        border-color: transparent;
+      }
+
+      /* Grain Overlay */
+      .grain {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9998;
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+
+      /* Magnetic Button */
+      .magnetic-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      /* Text Scramble Effect */
+      .scramble-text {
+        display: inline-block;
+      }
+
+      /* Project Cards */
+      .project-card {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      .project-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          45deg,
+          transparent 30%,
+          rgba(255, 77, 0, 0.1) 50%,
+          transparent 70%
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+      }
+
+      .project-card:hover::before {
+        transform: translateX(100%);
+      }
+
+      .project-card:hover {
+        transform: translateY(-10px) scale(1.02);
+      }
+
+      /* Marquee */
+      .marquee-container {
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .marquee-content {
+        display: inline-block;
+        animation: marquee 20s linear infinite;
+      }
+
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* Floating Elements */
+      .float-1 {
+        animation: float 6s ease-in-out infinite;
+      }
+      .float-2 {
+        animation: float 8s ease-in-out infinite 1s;
+      }
+      .float-3 {
+        animation: float 7s ease-in-out infinite 2s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(2deg);
+        }
+      }
+
+      /* Orbit Animation */
+      .orbit {
+        animation: orbit 20s linear infinite;
+      }
+
+      @keyframes orbit {
+        from {
+          transform: rotate(0deg) translateX(150px) rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg) translateX(150px) rotate(-360deg);
+        }
+      }
+
+      /* Skill Tags */
+      .skill-tag {
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      .skill-tag:hover {
+        background: var(--accent);
+        color: white;
+        transform: translateY(-3px) rotate(-2deg);
+      }
+
+      /* Timeline */
+      .timeline-line {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+      }
+
+      /* Glitch Effect on Hover */
+      .glitch-hover:hover {
+        animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both
+          infinite;
+      }
+
+      @keyframes glitch {
+        0% {
+          transform: translate(0);
+        }
+        20% {
+          transform: translate(-2px, 2px);
+        }
+        40% {
+          transform: translate(-2px, -2px);
+        }
+        60% {
+          transform: translate(2px, 2px);
+        }
+        80% {
+          transform: translate(2px, -2px);
+        }
+        100% {
+          transform: translate(0);
+        }
+      }
+
+      /* Portrait Mask Animation */
+      .portrait-mask {
+        clip-path: circle(0% at 50% 50%);
+        transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+      }
+
+      .portrait-mask.revealed {
+        clip-path: circle(100% at 50% 50%);
+      }
+
+      /* Image hover effect */
+      .portrait-container {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .portrait-container::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(10, 10, 10, 0.8) 0%,
+          transparent 50%
+        );
+        opacity: 0;
+        transition: opacity 0.4s;
+      }
+
+      .portrait-container:hover::after {
+        opacity: 1;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--dark);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 4px;
+      }
+
+      /* Parallax image container */
+      .parallax-img {
+        will-change: transform;
+        transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+    </style>
+  </head>
+  <body class="antialiased selection:bg-orange-500 selection:text-white">
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- Grain Overlay -->
+    <div class="grain"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-6 mix-blend-difference">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a
+          href="#"
+          class="font-display font-bold text-2xl tracking-tighter magnetic-btn"
+          data-cursor="hover"
+        >
+          D<span class="text-orange-500">.</span>O
+        </a>
+
+        <div class="hidden md:flex gap-8 items-center">
+          <a
+            href="#work"
+            class="magnetic-btn text-sm uppercase tracking-widest hover:text-orange-500 transition-colors"
+            data-cursor="hover"
+            >Work</a
+          >
+          <a
+            href="#about"
+            class="magnetic-btn text-sm uppercase tracking-widest hover:text-orange-500 transition-colors"
+            data-cursor="hover"
+            >About</a
+          >
+          <a
+            href="#experience"
+            class="magnetic-btn text-sm uppercase tracking-widest hover:text-orange-500 transition-colors"
+            data-cursor="hover"
+            >Experience</a
+          >
+          <a
+            href="#contact"
+            class="magnetic-btn px-6 py-3 border border-orange-500 text-orange-500 rounded-full hover:bg-orange-500 hover:text-white transition-all"
+            data-cursor="hover"
+          >
+            Let's Talk
+          </a>
+        </div>
+
+        <button
+          class="md:hidden text-2xl magnetic-btn"
+          data-cursor="hover"
+          onclick="toggleMenu()"
+        >
+          ☰
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div
+      id="mobileMenu"
+      class="fixed inset-0 bg-black z-40 transform translate-x-full transition-transform duration-500 flex flex-col items-center justify-center gap-8 md:hidden"
+    >
+      <a href="#work" class="font-display text-4xl" onclick="toggleMenu()"
+        >Work</a
+      >
+      <a href="#about" class="font-display text-4xl" onclick="toggleMenu()"
+        >About</a
+      >
+      <a href="#experience" class="font-display text-4xl" onclick="toggleMenu()"
+        >Experience</a
+      >
+      <a
+        href="#contact"
+        class="font-display text-4xl text-orange-500"
+        onclick="toggleMenu()"
+        >Contact</a
+      >
+    </div>
+
+    <!-- Hero Section -->
+    <section
+      class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+    >
+      <!-- Background Elements -->
+      <div class="absolute inset-0 z-0">
+        <div
+          class="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl float-1"
+        ></div>
+        <div
+          class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl float-2"
+        ></div>
+        <div
+          class="absolute top-1/2 left-1/2 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl float-3"
+        ></div>
+      </div>
+
+      <!-- Orbital Elements -->
+      <div
+        class="absolute inset-0 flex items-center justify-center pointer-events-none"
+      >
+        <div class="relative w-[600px] h-[600px]">
+          <div
+            class="absolute inset-0 border border-white/10 rounded-full"
+          ></div>
+          <div
+            class="absolute inset-12 border border-white/5 rounded-full"
+          ></div>
+          <div
+            class="absolute inset-24 border border-white/5 rounded-full"
+          ></div>
+
+          <!-- Orbiting Dots -->
+          <div
+            class="absolute top-1/2 left-1/2 w-4 h-4 bg-orange-500 rounded-full orbit"
+            style="animation-duration: 15s"
+          ></div>
+          <div
+            class="absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full orbit"
+            style="animation-duration: 25s; animation-direction: reverse"
+          ></div>
+        </div>
+      </div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
+        <div class="overflow-hidden mb-4">
+          <p
+            class="text-sm md:text-base uppercase tracking-[0.3em] text-gray-400 reveal-text"
+          >
+            Full-Stack Software Engineer
+          </p>
+        </div>
+
+        <h1
+          class="font-display font-bold text-5xl md:text-8xl lg:text-9xl leading-none mb-8 mix-blend-overlay"
+        >
+          <div class="overflow-hidden">
+            <span class="block scramble-text" data-text="DAMILARE"
+              >DAMILARE</span
+            >
+          </div>
+          <div class="overflow-hidden">
+            <span
+              class="block text-transparent stroke-text scramble-text"
+              data-text="OYEWOLE"
+              style="-webkit-text-stroke: 2px white"
+              >OYEWOLE</span
+            >
+          </div>
+        </h1>
+
+        <div class="max-w-2xl mx-auto mb-12 opacity-0 hero-fade">
+          <p class="text-lg md:text-xl text-gray-300 leading-relaxed">
+            Building scalable software solutions that deliver real impact.
+            Specializing in <span class="text-orange-500">React(Next)</span>,
+            <span class="text-orange-500">Node(Nest)</span>,
+            <span class="text-orange-500">React Native</span>, and
+            <span class="text-orange-500">Cloud Architecture</span>.
+          </p>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row gap-4 justify-center items-center opacity-0 hero-fade"
+        >
+          <a
+            href="#work"
+            class="magnetic-btn group relative px-8 py-4 bg-orange-500 text-white rounded-full overflow-hidden"
+            data-cursor="hover"
+          >
+            <span class="relative z-10 font-medium">View Projects</span>
+            <div
+              class="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"
+            ></div>
+            <span
+              class="absolute inset-0 flex items-center justify-center text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium"
+              >View Projects</span
+            >
+          </a>
+
+          <a
+            href="mailto:oyewoledamilare00@gmail.com"
+            class="magnetic-btn flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+            data-cursor="hover"
+          >
+            <span
+              class="w-12 h-12 rounded-full border border-gray-600 flex items-center justify-center group-hover:border-orange-500"
+            >
+              →
+            </span>
+            <span>Get in Touch</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div
+        class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 opacity-50"
+      >
+        <span class="text-xs uppercase tracking-widest">Scroll</span>
+        <div
+          class="w-px h-12 bg-gradient-to-b from-orange-500 to-transparent"
+        ></div>
+      </div>
+    </section>
+
+    <!-- Infinite Marquee -->
+    <div class="overflow-x-hidden">
+      <div
+        class="py-8 border-y border-white/10 bg-white/5 backdrop-blur-sm rotate-1 scale-105"
+      >
+        <div class="marquee-container">
+          <div
+            class="marquee-content font-display text-4xl md:text-6xl font-bold text-white/10"
+          >
+            FULL-STACK • REACT NATIVE • NEXT.JS • NODE.JS • APIS • MICROSERVICES •
+            TYPESCRIPT • NESTJS • PRISMA • FULL-STACK • REACT NATIVE • NEXT.JS •
+            NODE.JS • APIS • MICROSERVICES • TYPESCRIPT • NESTJS • PRISMA •
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Section with Portrait -->
+    <section id="about" class="py-32 relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <!-- Portrait Side -->
+          <div class="relative order-2 lg:order-1">
+            <div class="relative">
+              <!-- Background decorative elements -->
+              <div
+                class="absolute -inset-4 bg-gradient-to-br from-orange-500/20 to-purple-500/20 rounded-3xl blur-2xl"
+              ></div>
+
+              <!-- Main Portrait -->
+              <div
+                class="portrait-container relative rounded-2xl overflow-hidden portrait-mask"
+                id="portrait1"
+              >
+                <img
+                  src="public/profile_1.jpg"
+                  alt="Damilare Oyewole"
+                  class="w-full h-auto object-cover parallax-img"
+                  style="max-height: 700px"
+                />
+                <div
+                  class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/90 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500"
+                >
+                  <p class="text-orange-500 font-display text-xl">
+                    Damilare Oyewole
+                  </p>
+                  <p class="text-gray-300">
+                    Software Engineer & Problem Solver
+                  </p>
+                </div>
+              </div>
+
+              <!-- Floating badge -->
+              <div
+                class="absolute -bottom-6 -right-6 bg-orange-500 text-white px-6 py-3 rounded-full font-bold shadow-lg float-1"
+              >
+                5+ Years Exp.
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Side -->
+          <div class="order-1 lg:order-2">
+            <h2 class="font-display text-6xl md:text-7xl font-bold mb-8">
+              Engineer.<br />
+              <span class="text-orange-500">Creator.</span><br />
+              Problem Solver.
+            </h2>
+
+            <div class="space-y-6 text-lg text-gray-300 leading-relaxed">
+              <p>
+                I'm a Full-Stack Software Engineer specializing in scalable web
+                and mobile solutions for product-led companies. With expertise
+                in React.js, Next.js, React Native, Node.js, and cloud
+                architectures, I focus on delivering measurable business impact.
+              </p>
+              <p>
+                From leading teams of engineers to architecting microservices
+                that process millions in transactions, I bridge the gap between
+                technical excellence and business outcomes. Currently based in
+                Nigeria, working with teams across the globe.
+              </p>
+            </div>
+
+            <div
+              class="mt-10 grid grid-cols-3 gap-8 border-t border-white/10 pt-8"
+            >
+              <div>
+                <p class="font-display text-4xl font-bold text-orange-500">
+                  $10M+
+                </p>
+                <p class="text-sm text-gray-400 mt-1">Transactions Processed</p>
+              </div>
+              <div>
+                <p class="font-display text-4xl font-bold text-orange-500">
+                  5k+
+                </p>
+                <p class="text-sm text-gray-400 mt-1">Business Clients</p>
+              </div>
+              <div>
+                <p class="font-display text-4xl font-bold text-orange-500">
+                  40%
+                </p>
+                <p class="text-sm text-gray-400 mt-1">Avg. Performance Gain</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Selected Work Section -->
+    <section id="work" class="py-32 relative">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-20">
+          <div>
+            <h2 class="font-display text-6xl md:text-8xl font-bold mb-4">
+              Selected<br /><span class="text-orange-500">Work</span>
+            </h2>
+          </div>
+          <p class="text-gray-400 max-w-md text-right hidden md:block">
+            A curated selection of products and solutions built for scale,
+            security, and seamless user experience.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Project 1: Clearpay -->
+          <div
+            class="project-card group relative bg-gradient-to-br from-gray-900 to-black rounded-3xl p-8 md:p-12 border border-white/10 h-[500px] flex flex-col justify-between"
+            data-cursor="hover"
+          >
+            <div
+              class="absolute top-6 right-6 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-orange-500 group-hover:border-orange-500 transition-all"
+            >
+              <svg
+                class="w-5 h-5 transform group-hover:rotate-45 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 17L17 7M17 7H7M17 7V17"
+                />
+              </svg>
+            </div>
+
+            <div>
+              <span
+                class="text-orange-500 text-sm uppercase tracking-widest mb-2 block"
+                >2025 — Present</span
+              >
+              <h3
+                class="font-display text-4xl md:text-5xl font-bold mb-4 glitch-hover"
+              >
+                Clearpay
+              </h3>
+              <p class="text-gray-400 mb-6">
+                Cross-platform invoicing & payment app. Reduced processing time
+                by 40%, serving 5,000+ business clients across 3 countries.
+              </p>
+
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >React Native</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >Next.js</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >GraphQL</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >Supabase</span
+                >
+              </div>
+            </div>
+
+            <a
+              href="https://clearpayhub.ng"
+              target="_blank"
+              class="absolute inset-0 z-10"
+              aria-label="View Clearpay Project"
+            ></a>
+          </div>
+
+          <!-- Project 2: FinTrack -->
+          <div
+            class="project-card group relative bg-gradient-to-br from-gray-900 to-black rounded-3xl p-8 md:p-12 border border-white/10 h-[500px] flex flex-col justify-between md:mt-24"
+            data-cursor="hover"
+          >
+            <div
+              class="absolute top-6 right-6 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-orange-500 group-hover:border-orange-500 transition-all"
+            >
+              <svg
+                class="w-5 h-5 transform group-hover:rotate-45 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 17L17 7M17 7H7M17 7V17"
+                />
+              </svg>
+            </div>
+
+            <div>
+              <span
+                class="text-orange-500 text-sm uppercase tracking-widest mb-2 block"
+                >AI-Powered</span
+              >
+              <h3
+                class="font-display text-4xl md:text-5xl font-bold mb-4 glitch-hover"
+              >
+                FinTrack
+              </h3>
+              <p class="text-gray-400 mb-6">
+                Intelligent budgeting platform with $2B+ assets tracked.
+                Features AI insights, auto-savings, and bank-grade security.
+              </p>
+
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >AI/ML</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >React</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >Node.js</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >Prisma</span
+                >
+              </div>
+            </div>
+
+            <a
+              href="https://fintrack.live"
+              target="_blank"
+              class="absolute inset-0 z-10"
+              aria-label="View FinTrack Project"
+            ></a>
+          </div>
+
+          <!-- Project 3: Paibi -->
+          <div
+            class="project-card group relative bg-gradient-to-br from-gray-900 to-black rounded-3xl p-8 md:p-12 border border-white/10 h-[500px] flex flex-col justify-between"
+            data-cursor="hover"
+          >
+            <div
+              class="absolute top-6 right-6 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-orange-500 group-hover:border-orange-500 transition-all"
+            >
+              <svg
+                class="w-5 h-5 transform group-hover:rotate-45 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 17L17 7M17 7H7M17 7V17"
+                />
+              </svg>
+            </div>
+
+            <div>
+              <span
+                class="text-orange-500 text-sm uppercase tracking-widest mb-2 block"
+                >AI Platform</span
+              >
+              <h3
+                class="font-display text-4xl md:text-5xl font-bold mb-4 glitch-hover"
+              >
+                Paibi
+              </h3>
+              <p class="text-gray-400 mb-6">
+                AI-based bid management application. Leading development as CTO,
+                architecting intelligent automation systems.
+              </p>
+
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >Python</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >TensorFlow</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >Next.js</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >AWS</span
+                >
+              </div>
+            </div>
+
+            <a
+              href="https://core.paibi.app/"
+              target="_blank"
+              class="absolute inset-0 z-10"
+              aria-label="View Paibi Project"
+            ></a>
+          </div>
+
+          <!-- Project 4: MoniBoo -->
+          <div
+            class="project-card group relative bg-gradient-to-br from-gray-900 to-black rounded-3xl p-8 md:p-12 border border-white/10 h-[500px] flex flex-col justify-between md:mt-24"
+            data-cursor="hover"
+          >
+            <div
+              class="absolute top-6 right-6 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-orange-500 group-hover:border-orange-500 transition-all"
+            >
+              <svg
+                class="w-5 h-5 transform group-hover:rotate-45 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 17L17 7M17 7H7M17 7V17"
+                />
+              </svg>
+            </div>
+
+            <div>
+              <span
+                class="text-orange-500 text-sm uppercase tracking-widest mb-2 block"
+                >Web &amp; Mobile</span
+              >
+              <h3
+                class="font-display text-4xl md:text-5xl font-bold mb-4 glitch-hover"
+              >
+                MoniBoo
+              </h3>
+              <p class="text-gray-400 mb-6">
+                Smart money solution with seamless transfers, debit cards, and
+                investment tracking. Zero monthly fees.
+              </p>
+
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >React Native</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >Expo</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >Node.js</span
+                >
+                <span class="px-3 py-1 bg-white/5 rounded-full text-xs"
+                  >MongoDB</span
+                >
+              </div>
+            </div>
+
+            <a
+              href="https://moni-boo.vercel.app/"
+              target="_blank"
+              class="absolute inset-0 z-10"
+              aria-label="View MoniBoo Project"
+            ></a>
+          </div>
+
+          <!-- Project 5: Frolancer -->
+          <div
+            class="project-card group relative bg-gradient-to-br from-orange-900/20 to-black rounded-3xl p-8 md:p-12 border border-orange-500/30 h-[500px] flex flex-col justify-between md:col-span-2"
+            data-cursor="hover"
+          >
+            <div
+              class="absolute top-6 right-6 w-12 h-12 rounded-full border border-orange-500/30 flex items-center justify-center group-hover:bg-orange-500 group-hover:border-orange-500 transition-all"
+            >
+              <svg
+                class="w-5 h-5 transform group-hover:rotate-45 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 17L17 7M17 7H7M17 7V17"
+                />
+              </svg>
+            </div>
+
+            <div class="md:w-1/2">
+              <span
+                class="text-orange-500 text-sm uppercase tracking-widest mb-2 block"
+                >Marketplace</span
+              >
+              <h3
+                class="font-display text-4xl md:text-6xl font-bold mb-4 glitch-hover"
+              >
+                Frolancer
+              </h3>
+              <p class="text-gray-400 mb-6 text-lg">
+                African freelance marketplace connecting talent to global
+                clients. Built payment infrastructure (Expay) processing
+                transactions across 10+ countries. 40% increase in transaction
+                volume.
+              </p>
+
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-xs"
+                  >React.js</span
+                >
+                <span
+                  class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-xs"
+                  >Next.js</span
+                >
+                <span
+                  class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-xs"
+                  >NestJS</span
+                >
+                <span
+                  class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-xs"
+                  >Payment Gateway</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="absolute right-0 top-0 w-1/2 h-full opacity-20 bg-gradient-to-l from-orange-500/20 to-transparent hidden md:block"
+            ></div>
+
+            <a
+              href="https://frolancer.com"
+              target="_blank"
+              class="absolute inset-0 z-10"
+              aria-label="View Frolancer Project"
+            ></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Second Portrait Section - Break/Interlude -->
+    <section class="py-32 relative overflow-hidden bg-white/5">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="relative">
+          <!-- Large background text -->
+          <div
+            class="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+          >
+            <span
+              class="font-display text-[20vw] font-bold text-white/5 whitespace-nowrap"
+              >CREATE</span
+            >
+          </div>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10"
+          >
+            <div class="order-2 md:order-1">
+              <blockquote
+                class="font-display text-4xl md:text-5xl font-bold leading-tight mb-8"
+              >
+                "Building technology that
+                <span class="text-orange-500">empowers</span> people to achieve
+                more with their money and time."
+              </blockquote>
+
+              <div class="space-y-4 text-gray-400">
+                <p>
+                  When I'm not coding, you'll find me mentoring junior
+                  developers, exploring new tech stacks, or contributing to
+                  open-source projects.
+                </p>
+                <p>Active member of Google Developers Forum since 2022.</p>
+              </div>
+            </div>
+
+            <div class="order-1 md:order-2 relative md:-translate-x-8">
+              <div
+                class="portrait-container rounded-2xl overflow-hidden portrait-mask"
+                id="portrait2"
+              >
+                <img
+                  src="public/profile_2.jpg"
+                  alt="Damilare Oyewole Portrait"
+                  class="w-full h-auto object-center object-cover parallax-img"
+                  style="max-height: 600px; object-position: center 25%"
+                />
+              </div>
+
+              <!-- Decorative frame -->
+              <div
+                class="absolute -inset-4 border border-orange-500/30 rounded-2xl -z-10 translate-x-4 translate-y-4"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience" class="py-32 bg-white/5 relative overflow-hidden">
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,77,0,0.1),transparent_70%)]"
+      ></div>
+
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <h2
+          class="font-display text-6xl md:text-8xl font-bold mb-20 text-center"
+        >
+          Experience
+        </h2>
+
+        <div class="relative">
+          <!-- Timeline Line -->
+          <svg
+            class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 h-full w-1"
+            style="top: 0"
+          >
+            <line
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="100%"
+              stroke="rgba(255,77,0,0.3)"
+              stroke-width="2"
+              class="timeline-line"
+              id="timelineLine"
+            />
+          </svg>
+
+          <!-- Experience Items -->
+          <div class="space-y-20">
+            <!-- Clearpay -->
+            <div
+              class="relative flex flex-col md:flex-row items-center gap-8 experience-item opacity-0 translate-y-10"
+            >
+              <div class="md:w-1/2 md:text-right md:pr-12">
+                <span class="text-orange-500 font-bold text-lg"
+                  >2025 — Present</span
+                >
+                <h3 class="font-display text-3xl font-bold mt-2">
+                  Software Engineer
+                </h3>
+                <p class="text-gray-400 mt-2 text-lg">Clearpay</p>
+                <p class="text-gray-500 mt-4">
+                  Leading 6 engineers, managing $250K budgets, microservices
+                  migration (50% faster deployment), GraphQL + Supabase
+                  architecture.
+                </p>
+              </div>
+              <div
+                class="w-4 h-4 bg-orange-500 rounded-full border-4 border-black z-10"
+              ></div>
+              <div class="md:w-1/2 md:pl-12"></div>
+            </div>
+
+            <!-- Galaxy Lameka -->
+            <div
+              class="relative flex flex-col md:flex-row items-center gap-8 experience-item opacity-0 translate-y-10"
+            >
+              <div class="md:w-1/2 md:pr-12"></div>
+              <div
+                class="w-4 h-4 bg-white rounded-full border-4 border-black z-10"
+              ></div>
+              <div class="md:w-1/2 md:pl-12">
+                <span class="text-orange-500 font-bold text-lg"
+                  >2024 — 2025</span
+                >
+                <h3 class="font-display text-3xl font-bold mt-2">
+                  Software Engineer
+                </h3>
+                <p class="text-gray-400 mt-2 text-lg">Galaxy Lameka</p>
+                <p class="text-gray-500 mt-4">
+                  Next.js admin portal (35% workflow reduction), React
+                  Native/Expo app with 1,000+ active users, 15% DAU increase.
+                </p>
+              </div>
+            </div>
+
+            <!-- FXIQPRO -->
+            <div
+              class="relative flex flex-col md:flex-row items-center gap-8 experience-item opacity-0 translate-y-10"
+            >
+              <div class="md:w-1/2 md:text-right md:pr-12">
+                <span class="text-orange-500 font-bold text-lg"
+                  >2023 — 2024</span
+                >
+                <h3 class="font-display text-3xl font-bold mt-2">
+                  Software Engineer
+                </h3>
+                <p class="text-gray-400 mt-2 text-lg">FXIQPRO</p>
+                <p class="text-gray-500 mt-4">
+                  Invoicing platform processing $10M+ monthly, 65% speed
+                  improvement, supervised 3 developers, NestJS + MongoDB
+                  architecture.
+                </p>
+              </div>
+              <div
+                class="w-4 h-4 bg-white rounded-full border-4 border-black z-10"
+              ></div>
+              <div class="md:w-1/2 md:pl-12"></div>
+            </div>
+
+            <!-- Spectra Risk -->
+            <div
+              class="relative flex flex-col md:flex-row items-center gap-8 experience-item opacity-0 translate-y-10"
+            >
+              <div class="md:w-1/2 md:pr-12"></div>
+              <div
+                class="w-4 h-4 bg-white rounded-full border-4 border-black z-10"
+              ></div>
+              <div class="md:w-1/2 md:pl-12">
+                <span class="text-orange-500 font-bold text-lg"
+                  >2021 — 2023</span
+                >
+                <h3 class="font-display text-3xl font-bold mt-2">
+                  Software Engineer
+                </h3>
+                <p class="text-gray-400 mt-2 text-lg">Spectra Risk</p>
+                <p class="text-gray-500 mt-4">
+                  FX transaction management platform, 30% API response
+                  improvement, compliance coordination, NestJS backend.
+                </p>
+              </div>
+            </div>
+
+            <!-- Frowork -->
+            <div
+              class="relative flex flex-col md:flex-row items-center gap-8 experience-item opacity-0 translate-y-10"
+            >
+              <div class="md:w-1/2 md:text-right md:pr-12">
+                <span class="text-orange-500 font-bold text-lg"
+                  >2019 — 2021</span
+                >
+                <h3 class="font-display text-3xl font-bold mt-2">
+                  Software Developer
+                </h3>
+                <p class="text-gray-400 mt-2 text-lg">Frowork</p>
+                <p class="text-gray-500 mt-4">
+                  Built Expay payment solution (40% volume increase), Frolancer
+                  marketplace across 10+ African countries, React.js + NestJS.
+                </p>
+              </div>
+              <div
+                class="w-4 h-4 bg-white rounded-full border-4 border-black z-10"
+              ></div>
+              <div class="md:w-1/2 md:pl-12"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="py-32">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row gap-12">
+          <div class="md:w-1/3">
+            <h2 class="font-display text-5xl md:text-6xl font-bold mb-6">
+              Tech<br /><span class="text-orange-500">Stack</span>
+            </h2>
+            <p class="text-gray-400">
+              Technologies I use to build scalable, high-performance
+              applications.
+            </p>
+          </div>
+
+          <div class="md:w-2/3">
+            <div class="flex flex-wrap gap-3">
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >TypeScript</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >React Native</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >Next.js</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >Node.js</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >NestJS</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >GraphQL</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >PostgreSQL</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >MongoDB</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >Supabase</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >Prisma</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >Expo</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >AWS</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >Microservices</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >DevOps</span
+              >
+              <span
+                class="skill-tag px-6 py-3 bg-white/5 border border-white/10 rounded-full text-lg cursor-default"
+                >React.js</span
+              >
+            </div>
+
+            <div
+              class="mt-12 p-8 bg-gradient-to-r from-orange-500/10 to-transparent rounded-2xl border border-orange-500/20"
+            >
+              <h3 class="font-display text-2xl font-bold mb-4 text-orange-500">
+                Education
+              </h3>
+              <p class="text-xl font-medium">B.Pharm. in Pharmacy</p>
+              <p class="text-gray-400">
+                Obafemi Awolowo University, Ile-Ife, Nigeria — 2024
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 relative overflow-hidden">
+      <div class="absolute inset-0 bg-orange-500/5"></div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,77,0,0.2),transparent_70%)]"
+      ></div>
+
+      <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
+        <h2 class="font-display text-6xl md:text-9xl font-bold mb-8">
+          Let's Build<br />Together
+        </h2>
+        <p class="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto">
+          Open for freelance projects, full-time opportunities, and interesting
+          collaborations across industries.
+        </p>
+
+        <div
+          class="flex flex-col md:flex-row gap-6 justify-center items-center mb-16 mx-4 md:mx-0"
+        >
+          <a
+            href="mailto:oyewoledamilare00@gmail.com"
+            class="magnetic-btn group relative w-full md:w-auto px-6 md:px-10 py-4 md:py-5 bg-orange-500 text-white text-base md:text-xl rounded-full overflow-hidden inline-flex items-center justify-center gap-3"
+            data-cursor="hover"
+          >
+            <span class="relative z-10 font-medium"
+              >oyewoledamilare00@gmail.com</span
+            >
+            <svg
+              class="w-5 h-5 relative z-10 transform group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </a>
+
+          <a
+            href="tel:+2349046189180"
+            class="magnetic-btn px-10 py-5 border border-white/20 text-xl rounded-full hover:bg-white hover:text-black transition-all"
+            data-cursor="hover"
+          >
+            +234 904 618 9180
+          </a>
+        </div>
+
+        <div class="flex justify-center gap-6">
+          <a
+            href="https://github.com/dasiloy"
+            target="_blank"
+            class="magnetic-btn w-14 h-14 rounded-full border border-white/20 flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-all"
+            data-cursor="hover"
+          >
+            <span class="sr-only">GitHub</span>
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/damilare-oyewole-5134791ab"
+            target="_blank"
+            class="magnetic-btn w-14 h-14 rounded-full border border-white/20 flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-all"
+            data-cursor="hover"
+          >
+            <span class="sr-only">LinkedIn</span>
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://x.com/oyewole1998"
+            target="_blank"
+            class="magnetic-btn w-14 h-14 rounded-full border border-white/20 flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-all"
+            data-cursor="hover"
+          >
+            <span class="sr-only">Twitter</span>
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="py-8 border-t border-white/10 text-center text-gray-500 text-sm"
+    >
+      <p>© 2025 Damilare Oyewole. Crafted with obsession.</p>
+    </footer>
+
+    <script>
+      // Register GSAP ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Custom Cursor
+      const cursorDot = document.querySelector(".cursor-dot");
+      const cursorOutline = document.querySelector(".cursor-outline");
+      const hoverElements = document.querySelectorAll('[data-cursor="hover"]');
+
+      let mouseX = 0,
+        mouseY = 0;
+      let outlineX = 0,
+        outlineY = 0;
+
+      document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        cursorDot.style.left = mouseX + "px";
+        cursorDot.style.top = mouseY + "px";
+      });
+
+      function animateCursor() {
+        outlineX += (mouseX - outlineX) * 0.15;
+        outlineY += (mouseY - outlineY) * 0.15;
+
+        cursorOutline.style.left = outlineX + "px";
+        cursorOutline.style.top = outlineY + "px";
+
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      hoverElements.forEach((el) => {
+        el.addEventListener("mouseenter", () =>
+          cursorOutline.classList.add("hover"),
+        );
+        el.addEventListener("mouseleave", () =>
+          cursorOutline.classList.remove("hover"),
+        );
+      });
+
+      // Magnetic Buttons
+      const magneticBtns = document.querySelectorAll(".magnetic-btn");
+
+      magneticBtns.forEach((btn) => {
+        btn.addEventListener("mousemove", (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+
+          btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+
+        btn.addEventListener("mouseleave", () => {
+          btn.style.transform = "translate(0, 0)";
+        });
+      });
+
+      // Text Scramble Effect
+      class TextScramble {
+        constructor(el) {
+          this.el = el;
+          this.chars = "!<>-_\\/[]{}—=+*^?#________";
+          this.update = this.update.bind(this);
+        }
+
+        setText(newText) {
+          const oldText = this.el.innerText;
+          const length = Math.max(oldText.length, newText.length);
+          const promise = new Promise((resolve) => (this.resolve = resolve));
+          this.queue = [];
+
+          for (let i = 0; i < length; i++) {
+            const from = oldText[i] || "";
+            const to = newText[i] || "";
+            const start = Math.floor(Math.random() * 40);
+            const end = start + Math.floor(Math.random() * 40);
+            this.queue.push({ from, to, start, end });
+          }
+
+          cancelAnimationFrame(this.frameRequest);
+          this.frame = 0;
+          this.update();
+          return promise;
+        }
+
+        update() {
+          let output = "";
+          let complete = 0;
+
+          for (let i = 0, n = this.queue.length; i < n; i++) {
+            let { from, to, start, end, char } = this.queue[i];
+
+            if (this.frame >= end) {
+              complete++;
+              output += to;
+            } else if (this.frame >= start) {
+              if (!char || Math.random() < 0.28) {
+                char = this.randomChar();
+                this.queue[i].char = char;
+              }
+              output += `<span class="text-orange-500">${char}</span>`;
+            } else {
+              output += from;
+            }
+          }
+
+          this.el.innerHTML = output;
+
+          if (complete === this.queue.length) {
+            this.resolve();
+          } else {
+            this.frameRequest = requestAnimationFrame(this.update);
+            this.frame++;
+          }
+        }
+
+        randomChar() {
+          return this.chars[Math.floor(Math.random() * this.chars.length)];
+        }
+      }
+
+      // Initialize Scramble on Hero Text
+      document.querySelectorAll(".scramble-text").forEach((el) => {
+        const fx = new TextScramble(el);
+        let counter = 0;
+        const phrases = [el.dataset.text, el.dataset.text];
+
+        const next = () => {
+          fx.setText(phrases[counter]).then(() => {
+            setTimeout(next, 3000);
+          });
+          counter = (counter + 1) % phrases.length;
+        };
+
+        setTimeout(next, 1000);
+      });
+
+      // Hero Animations
+      gsap.to(".hero-fade", {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.2,
+        delay: 0.5,
+        ease: "power3.out",
+      });
+
+      gsap.from(".reveal-text", {
+        y: 100,
+        duration: 1,
+        delay: 0.2,
+        ease: "power4.out",
+      });
+
+      // Portrait reveal animations
+      const portrait1 = document.getElementById("portrait1");
+      const portrait2 = document.getElementById("portrait2");
+
+      ScrollTrigger.create({
+        trigger: portrait1,
+        start: "top 80%",
+        onEnter: () => portrait1.classList.add("revealed"),
+      });
+
+      ScrollTrigger.create({
+        trigger: portrait2,
+        start: "top 80%",
+        onEnter: () => portrait2.classList.add("revealed"),
+      });
+
+      // Parallax effect on images
+      document.querySelectorAll(".parallax-img").forEach((img) => {
+        gsap.to(img, {
+          yPercent: -10,
+          ease: "none",
+          scrollTrigger: {
+            trigger: img,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      });
+
+      // Timeline Animation
+      gsap.to(".timeline-line", {
+        strokeDashoffset: 0,
+        scrollTrigger: {
+          trigger: "#experience",
+          start: "top center",
+          end: "bottom center",
+          scrub: 1,
+        },
+      });
+
+      gsap.utils.toArray(".experience-item").forEach((item, i) => {
+        gsap.to(item, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: i * 0.1,
+          scrollTrigger: {
+            trigger: item,
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      // Project Cards Parallax
+      gsap.utils.toArray(".project-card").forEach((card, i) => {
+        gsap.from(card, {
+          y: 100,
+          opacity: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      // Mobile Menu Toggle
+      function toggleMenu() {
+        const menu = document.getElementById("mobileMenu");
+        menu.classList.toggle("translate-x-full");
+      }
+
+      // Smooth Scroll
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
